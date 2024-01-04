@@ -1,7 +1,7 @@
 require('dotenv').config();
 const locale = require('../../../../locale').default;
 const {send, deleteLastMSG} = require('../../../Helpers/index');
-const {User_state, User, Teacher} = require('../../../../sequelize');
+const {User_state, User, Teacher, TimeSchedule} = require('../../../../sequelize');
 
 module.exports = {
     function: async (ctx, bot) => {
@@ -19,6 +19,10 @@ module.exports = {
                 }]});
             if (tryFindPeople) {
                 if (!tryFindPeople.dataValues.teacher || tryFindPeople.dataValues.teacher.dataValues.heFired === true) {
+                    const allScheduleWithTeacher = TimeSchedule.findAll({where: {teacher: parseInt(ctx.text)}});
+                    for (const schedule of allScheduleWithTeacher){
+                        await TimeShedule.destroy({where: {id: schedule.dataValues.id}});
+                    }
                     await Teacher.destroy({where: {id: parseInt(ctx.text)}})
                     await User_state.update({
                         action: 'addTeacher',
