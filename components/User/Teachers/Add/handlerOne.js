@@ -19,9 +19,9 @@ module.exports = {
                 }]});
             if (tryFindPeople) {
                 if (!tryFindPeople.dataValues.teacher || tryFindPeople.dataValues.teacher.dataValues.heFired === true) {
-                    const allScheduleWithTeacher = TimeSchedule.findAll({where: {teacher: parseInt(ctx.text)}});
+                    const allScheduleWithTeacher = await TimeSchedule.findAll({where: {teacher: parseInt(ctx.text)}});
                     for (const schedule of allScheduleWithTeacher){
-                        await TimeShedule.destroy({where: {id: schedule.dataValues.id}});
+                        await TimeSchedule.destroy({where: {id: schedule.dataValues.id}});
                     }
                     await Teacher.destroy({where: {id: parseInt(ctx.text)}})
                     await User_state.update({
